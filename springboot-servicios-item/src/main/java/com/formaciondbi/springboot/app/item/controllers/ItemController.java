@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.formaciondbi.springboot.app.commons.models.entity.Producto;
+import com.formacionbdi.springboot.app.commons.models.entity.Producto;
 import com.formaciondbi.springboot.app.item.models.Item;
 import com.formaciondbi.springboot.app.item.models.service.ItemService;
 

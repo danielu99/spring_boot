@@ -2,7 +2,7 @@ package com.formaciondbi.springboot.app.item.models.service;
 
 import java.util.List;
 
-import com.formaciondbi.springboot.app.commons.models.entity.Producto;
+import com.formacionbdi.springboot.app.commons.models.entity.Producto;
 import com.formaciondbi.springboot.app.item.models.Item;
 
 public interface ItemService {
