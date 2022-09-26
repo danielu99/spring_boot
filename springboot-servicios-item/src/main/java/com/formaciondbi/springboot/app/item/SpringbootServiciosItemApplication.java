@@ -14,7 +14,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 //@RibbonClient(name="servicio-productos")
 @EnableFeignClients
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {EmbeddedDataSourceConfiguration.class})
+//@EnableAutoConfiguration(exclude = {EmbeddedDataSourceConfiguration.class})
 public class SpringbootServiciosItemApplication {
 
 	public static void main(String[] args) {
