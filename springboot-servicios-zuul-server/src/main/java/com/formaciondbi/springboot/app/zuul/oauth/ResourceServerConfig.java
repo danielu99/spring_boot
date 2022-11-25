@@ -1,9 +1,13 @@
 package com.formaciondbi.springboot.app.zuul.oauth;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -11,6 +15,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @RefreshScope
 @Configuration
@@ -32,11 +40,34 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		.antMatchers(HttpMethod.GET,"/api/productos/ver/{id}","/api/items/ver/{id}/{cantidad}","/api/usuarios/usuarios/{id}")
 		.hasAnyRole("ADMIN","USER")
 		.antMatchers("/api/productos/**","/api/items/**","/api/usuarios/**").hasRole("ADMIN")
-		.anyRequest().authenticated();
+		.anyRequest().authenticated()
+		.and().cors().configurationSource(corsConfigurationSource());
 //		.antMatchers(HttpMethod.POST,"/api/productos/crear","/api/items/crear","/api/usuarios/usuarios").hasRole("ADMIN")
 //		.antMatchers(HttpMethod.PUT,"/api/productos/editar/{id}","/api/items//editar/{id}","/api/usuarios/usuarios/{id}").hasRole("ADMIN")
 //		.antMatchers(HttpMethod.DELETE,"/api/productos/eliminar/{id}","/api/items//eliminar/{id}","/api/usuarios/usuarios/{id}").hasRole("ADMIN");
 		
+	}
+	
+	//Registrar como BEAN
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration corsConfig = new CorsConfiguration();
+		corsConfig.setAllowedOrigins(Arrays.asList("*"));
+		corsConfig.setAllowedMethods(Arrays.asList("POST","GET","PUT","DELETE","OPTIONS"));
+		corsConfig.setAllowCredentials(Boolean.TRUE);
+		corsConfig.setAllowedHeaders(Arrays.asList("Authorization","Content-Type"));
+		
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		//Para que se aplique a todas las rutas, esta configuración de CORS.
+		source.registerCorsConfiguration("/**", corsConfig);
+		return source;
+	}
+	
+	@Bean
+	public FilterRegistrationBean<CorsFilter> corsFilter(){
+		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(corsConfigurationSource()));
+		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		return bean;
 	}
 	
 	@Bean

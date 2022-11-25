@@ -9,8 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name="roles")
+@Getter
+@Setter
 public class Rol implements Serializable{
 	
 	@Id
@@ -21,21 +26,5 @@ public class Rol implements Serializable{
 	private String nombre;
 	
 	private static final long serialVersionUID = 6595145379859167872L;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
 
 }
