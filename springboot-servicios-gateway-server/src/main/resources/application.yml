@@ -33,8 +33,8 @@ spring:
               statusCodes: 500
               fallbackUri: forward:/api/items/ver/9/cantidad/5          - StripPrefix=2
           - EjemploCookie=Hola mi mensaje personalizado, usuario, DanielLeon
-      - id: servicio-item
-        uri: lb://servicio-item
+      - id: servicio-items
+        uri: lb://servicio-items
         predicates:
           - Path=/api/items/**
         filters:
@@ -43,3 +43,15 @@ spring:
         - AddResponseHeader=token-request,12345678
         - SetResponseHeader=Content-Type,text/plain
         - AddRequestParameter=nombre, daniel
+      - id: servicio-oauth
+        uri: lb://servicio-oauth
+        predicates:
+          - Path=/api/security/**
+        filters:
+        - StripPrefix=2
+      - id: servicio-usuario
+        uri: lb://servicio-usuario
+        predicates:
+          - Path=/api/usuario/**
+        filters:
+        - StripPrefix=2
