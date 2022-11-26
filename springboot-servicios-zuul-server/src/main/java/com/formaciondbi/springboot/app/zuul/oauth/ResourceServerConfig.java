@@ -1,6 +1,7 @@
 package com.formaciondbi.springboot.app.zuul.oauth;
 
 import java.util.Arrays;
+import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -24,7 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-	
+
 	@Value("${config.security.oauth.jwt.key}")
 	private String jwtKey;
 
@@ -36,40 +37,42 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/api/security/oauth/**").permitAll()
-		.antMatchers(HttpMethod.GET,"/api/productos/listar","/api/items/listar","/api/usuarios/usuarios").permitAll()
-		.antMatchers(HttpMethod.GET,"/api/productos/ver/{id}","/api/items/ver/{id}/{cantidad}","/api/usuarios/usuarios/{id}")
-		.hasAnyRole("ADMIN","USER")
-		.antMatchers("/api/productos/**","/api/items/**","/api/usuarios/**").hasRole("ADMIN")
-		.anyRequest().authenticated()
-		.and().cors().configurationSource(corsConfigurationSource());
+				.antMatchers(HttpMethod.GET, "/api/productos/listar", "/api/items/listar", "/api/usuarios/usuarios")
+				.permitAll()
+				.antMatchers(HttpMethod.GET, "/api/productos/ver/{id}", "/api/items/ver/{id}/{cantidad}",
+						"/api/usuarios/usuarios/{id}")
+				.hasAnyRole("ADMIN", "USER").antMatchers("/api/productos/**", "/api/items/**", "/api/usuarios/**")
+				.hasRole("ADMIN").anyRequest().authenticated().and().cors()
+				.configurationSource(corsConfigurationSource());
 //		.antMatchers(HttpMethod.POST,"/api/productos/crear","/api/items/crear","/api/usuarios/usuarios").hasRole("ADMIN")
 //		.antMatchers(HttpMethod.PUT,"/api/productos/editar/{id}","/api/items//editar/{id}","/api/usuarios/usuarios/{id}").hasRole("ADMIN")
 //		.antMatchers(HttpMethod.DELETE,"/api/productos/eliminar/{id}","/api/items//eliminar/{id}","/api/usuarios/usuarios/{id}").hasRole("ADMIN");
-		
+
 	}
-	
-	//Registrar como BEAN
+
+	// Registrar como BEAN
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfig = new CorsConfiguration();
 		corsConfig.setAllowedOrigins(Arrays.asList("*"));
-		corsConfig.setAllowedMethods(Arrays.asList("POST","GET","PUT","DELETE","OPTIONS"));
+		corsConfig.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
 		corsConfig.setAllowCredentials(Boolean.TRUE);
-		corsConfig.setAllowedHeaders(Arrays.asList("Authorization","Content-Type"));
-		
+		corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		//Para que se aplique a todas las rutas, esta configuración de CORS.
+		// Para que se aplique a todas las rutas, esta configuración de CORS.
 		source.registerCorsConfiguration("/**", corsConfig);
 		return source;
 	}
-	
+
 	@Bean
-	public FilterRegistrationBean<CorsFilter> corsFilter(){
-		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(corsConfigurationSource()));
+	public FilterRegistrationBean<CorsFilter> corsFilter() {
+		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(
+				new CorsFilter(corsConfigurationSource()));
 		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		return bean;
 	}
-	
+
 	@Bean
 	public JwtTokenStore tokenStorage() {
 		return new JwtTokenStore(accessTokenConverter());
@@ -78,7 +81,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-		tokenConverter.setSigningKey(jwtKey);
+		tokenConverter.setSigningKey(Base64.getEncoder().encodeToString(jwtKey.getBytes()));
 		return tokenConverter;
 	}
 }
