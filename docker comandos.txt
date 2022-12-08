@@ -1,0 +1,10 @@
+Comando para generar archivo jar de config-server: .\mvnw clean package
+Comando para crear imagen de config-server: docker build -t config-server:v1 .
+Comando para crear red para las imágenes de docker: docker network create springcloud
+Comando para ejecutar la imagen para crear contenedor: docker run -p 8887:8887 --name config-server --network springcloud config-server:v1 // El interno es el de la derecha, ese debe ser el mismo que el del micro.
+Comando para ver los contenedores (Solo LEVANTADOS): docker container ls
+Comando para ver las imagenes de docker: docker images
+Comando para ver todos los contenedores (Incluso los que se han cerrado): docker ps -a
+Comando para descargar imagen de mysql: docker pull mysql:8
+Comando para echar a andar imagen en un contenedor, mysql: docker run -p 3307:3306 --name microservicios-mysql8 --network springcloud -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db_springboot_cloud -d mysql:8
+Comando para ver logs: docker logs -f microservicios-mysql8
