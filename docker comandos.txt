@@ -8,3 +8,6 @@ Comando para ver todos los contenedores (Incluso los que se han cerrado): docker
 Comando para descargar imagen de mysql: docker pull mysql:8
 Comando para echar a andar imagen en un contenedor, mysql: docker run -p 3307:3306 --name microservicios-mysql8 --network springcloud -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db_springboot_cloud -d mysql:8
 Comando para ver logs: docker logs -f microservicios-mysql8
+Comando para descargar imagen de postgresql: docker pull postgres:12-alpine
+Comando para echar a andar imagen en un contenedor, postgresql: docker run -p 5433:5432 --name microservicios-postgres12 --network springcloud -e POSTGRES_PASSWORD=root -e POSTGRES_DB=db_springboot_cloud -d postgres:12-alpine
+Comando para generar el jar BRINCANDO los tests, debido a que no encontrará las bases de datos: .\mvnw clean package -DskipTests
