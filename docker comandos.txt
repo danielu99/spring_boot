@@ -11,3 +11,6 @@ Comando para ver logs: docker logs -f microservicios-mysql8
 Comando para descargar imagen de postgresql: docker pull postgres:12-alpine
 Comando para echar a andar imagen en un contenedor, postgresql: docker run -p 5433:5432 --name microservicios-postgres12 --network springcloud -e POSTGRES_PASSWORD=root -e POSTGRES_DB=db_springboot_cloud -d postgres:12-alpine
 Comando para generar el jar BRINCANDO los tests, debido a que no encontrará las bases de datos: .\mvnw clean package -DskipTests
+
+We added a VOLUME pointing to "/tmp" because that is where a Spring Boot application creates working directories for Tomcat by default. The effect is to create a temporary file on your host under "/var/lib/docker"
+and link it to the container under "/tmp".
