@@ -16,3 +16,5 @@ We added a VOLUME pointing to "/tmp" because that is where a Spring Boot applica
 and link it to the container under "/tmp".
 
 Comando para levantar contenedores a partir de un archivo docker-compose: docker-compose up
+Comando para detener contenedores a través de docker-compose (elimina los contenedores y la red de springcloud): docker-compose down -v
+Comando para levantar contenedor a partir de archivo docker-compose (-d lo hace en segundo plano y no muestra consola): docker-compose -d servicio-productos
