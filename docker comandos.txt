@@ -14,3 +14,5 @@ Comando para generar el jar BRINCANDO los tests, debido a que no encontrará las
 
 We added a VOLUME pointing to "/tmp" because that is where a Spring Boot application creates working directories for Tomcat by default. The effect is to create a temporary file on your host under "/var/lib/docker"
 and link it to the container under "/tmp".
+
+Comando para levantar contenedores a partir de un archivo docker-compose: docker-compose up
